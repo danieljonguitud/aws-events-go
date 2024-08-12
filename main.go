@@ -1,7 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"danieljonguitud.com/aws-events-go/db"
+)
 
 func main() {
-	fmt.Print("project init")
+	db.InitDB()
 }
