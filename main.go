@@ -1,9 +1,35 @@
 package main
 
 import (
-	"danieljonguitud.com/aws-events-go/db"
+	"context"
+	"database/sql"
+	_ "embed"
+	_ "github.com/mattn/go-sqlite3"
+	"log"
 )
 
+//go:embed schema.sql
+var ddl string
+
+func run() error {
+	ctx := context.Background()
+
+	db, err := sql.Open("sqlite3", "db.sqlite3")
+
+	if err != nil {
+		return err
+	}
+
+	// create tables
+	if _, err := db.ExecContext(ctx, ddl); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func main() {
-	db.InitDB()
+	if err := run(); err != nil {
+		log.Fatal(err)
+	}
 }
