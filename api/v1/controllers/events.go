@@ -1,10 +1,14 @@
 package controllers
 
 import (
-	"fmt"
+	"encoding/json"
 	"net/http"
 )
 
 func GetAllEvents(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "All my events working with air")
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"status":     "success",
+		"statusCode": 200,
+	})
 }
