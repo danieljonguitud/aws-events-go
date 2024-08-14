@@ -47,3 +47,37 @@ func (q *Queries) CreateEvent(ctx context.Context, arg CreateEventParams) (Event
 	)
 	return i, err
 }
+
+const listEvents = `-- name: ListEvents :many
+SELECT id, name, description, location, datetime, user_id FROM events
+`
+
+func (q *Queries) ListEvents(ctx context.Context) ([]Event, error) {
+	rows, err := q.db.QueryContext(ctx, listEvents)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Event
+	for rows.Next() {
+		var i Event
+		if err := rows.Scan(
+			&i.ID,
+			&i.Name,
+			&i.Description,
+			&i.Location,
+			&i.Datetime,
+			&i.UserID,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}

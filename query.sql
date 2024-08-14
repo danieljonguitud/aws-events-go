@@ -5,3 +5,6 @@ INSERT INTO events (
     ?, ?, ?, ?, ?
 )
 RETURNING *;
+
+-- name: ListEvents :many
+SELECT * FROM events;

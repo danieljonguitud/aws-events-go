@@ -2,45 +2,54 @@ package main
 
 import (
 	"context"
-	v1Routes "danieljonguitud.com/aws-events-go/api/v1/routes"
 	"database/sql"
 	_ "embed"
 	"fmt"
-	_ "github.com/mattn/go-sqlite3"
 	"log"
 	"net/http"
+
+	"danieljonguitud.com/aws-events-go/api/v1/controllers"
+	v1Routes "danieljonguitud.com/aws-events-go/api/v1/routes"
+	"danieljonguitud.com/aws-events-go/db"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 //go:embed schema.sql
 var ddl string
 
-func run() error {
+func run() (*db.Queries, error) {
 	ctx := context.Background()
 
-	db, err := sql.Open("sqlite3", "db.sqlite3")
+	conn, err := sql.Open("sqlite3", "db.sqlite3")
 
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	// create tables
-	if _, err := db.ExecContext(ctx, ddl); err != nil {
-		return err
+	if _, err := conn.ExecContext(ctx, ddl); err != nil {
+		return nil, err
 	}
 
-	return nil
+	queries := db.New(conn)
+
+	return queries, nil
 }
 
 func main() {
-	if err := run(); err != nil {
+	queries, err := run()
+
+	if err != nil {
 		log.Fatal(err)
 	}
 
 	mux := http.NewServeMux()
 
-	v1Routes.RegisterRoutes(mux)
+	controller := controllers.New(queries, mux)
 
-	if err := http.ListenAndServe(":8080", mux); err != nil {
+	v1Routes.RegisterRoutes(controller)
+
+	if err := http.ListenAndServe(":8080", controller.Server); err != nil {
 		fmt.Println(err.Error())
 	}
 }
