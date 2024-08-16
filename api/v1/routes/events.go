@@ -10,6 +10,7 @@ func RegisterEventsRoutes(basePath string, controller *controllers.Controller) h
 	eventRoutes := http.NewServeMux()
 
 	eventRoutes.HandleFunc("GET /", controller.GetAllEvents)
+	eventRoutes.HandleFunc("POST /", controller.CreateEvent)
 
 	return http.StripPrefix(basePath, eventRoutes)
 }

@@ -1,25 +1,45 @@
 package controllers
 
 import (
-	"context"
+	ctx "context"
+	"danieljonguitud.com/aws-events-go/db"
 	"encoding/json"
-	"fmt"
 	"net/http"
 )
 
 func (c *Controller) GetAllEvents(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-
-	events, err := c.Queries.ListEvents(context.Background())
+	events, err := c.Queries.ListEvents(ctx.Background())
 
 	if err != nil {
-		fmt.Printf(err.Error())
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
+	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]interface{}{
-		"status":     "success",
-		"statusCode": 200,
-		"events":     events,
+		"data": events,
+	})
+}
+
+func (c *Controller) CreateEvent(w http.ResponseWriter, r *http.Request) {
+	var params db.CreateEventParams
+
+	err := json.NewDecoder(r.Body).Decode(&params)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	event, err := c.Queries.CreateEvent(ctx.Background(), params)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"data": event,
 	})
 }

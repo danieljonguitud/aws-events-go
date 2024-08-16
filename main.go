@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 
+	v1 "danieljonguitud.com/aws-events-go/api/v1"
 	"danieljonguitud.com/aws-events-go/api/v1/controllers"
 	v1Routes "danieljonguitud.com/aws-events-go/api/v1/routes"
 	"danieljonguitud.com/aws-events-go/db"
@@ -45,11 +46,13 @@ func main() {
 
 	mux := http.NewServeMux()
 
-	controller := controllers.New(queries, mux)
+	controller := controllers.New(queries)
 
-	v1Routes.RegisterRoutes(controller)
+	v1Api := v1.New(mux, controller, queries)
 
-	if err := http.ListenAndServe(":8080", controller.Server); err != nil {
+	v1Routes.RegisterRoutes(v1Api)
+
+	if err := http.ListenAndServe(":8080", v1Api.Server); err != nil {
 		fmt.Println(err.Error())
 	}
 }

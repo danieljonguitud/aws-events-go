@@ -1,15 +1,14 @@
 package routes
 
 import (
+	v1 "danieljonguitud.com/aws-events-go/api/v1"
 	"net/http"
-
-	"danieljonguitud.com/aws-events-go/api/v1/controllers"
 )
 
-func RegisterRoutes(controller *controllers.Controller) {
-	v1 := http.NewServeMux()
+func RegisterRoutes(v1Api *v1.V1API) {
+	routes := http.NewServeMux()
 
-	v1.Handle("/events/", RegisterEventsRoutes("/events", controller))
+	routes.Handle("/events/", RegisterEventsRoutes("/events", v1Api.Controller))
 
-	controller.Server.Handle("/api/v1/", http.StripPrefix("/api/v1", v1))
+	v1Api.Server.Handle("/api/v1/", http.StripPrefix("/api/v1", routes))
 }
