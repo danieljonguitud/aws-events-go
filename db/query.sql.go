@@ -48,6 +48,50 @@ func (q *Queries) CreateEvent(ctx context.Context, arg CreateEventParams) (Event
 	return i, err
 }
 
+const deleteEvent = `-- name: DeleteEvent :exec
+DELETE FROM events
+WHERE id = ?
+`
+
+func (q *Queries) DeleteEvent(ctx context.Context, id int64) error {
+	_, err := q.db.ExecContext(ctx, deleteEvent, id)
+	return err
+}
+
+const deleteRegistration = `-- name: DeleteRegistration :exec
+DELETE FROM registrations 
+WHERE event_id = ? AND user_id = ?
+`
+
+type DeleteRegistrationParams struct {
+	EventID int64
+	UserID  int64
+}
+
+func (q *Queries) DeleteRegistration(ctx context.Context, arg DeleteRegistrationParams) error {
+	_, err := q.db.ExecContext(ctx, deleteRegistration, arg.EventID, arg.UserID)
+	return err
+}
+
+const getEvent = `-- name: GetEvent :one
+SELECT id, name, description, location, datetime, user_id FROM events
+WHERE id = ?
+`
+
+func (q *Queries) GetEvent(ctx context.Context, id int64) (Event, error) {
+	row := q.db.QueryRowContext(ctx, getEvent, id)
+	var i Event
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Description,
+		&i.Location,
+		&i.Datetime,
+		&i.UserID,
+	)
+	return i, err
+}
+
 const listEvents = `-- name: ListEvents :many
 SELECT id, name, description, location, datetime, user_id FROM events
 `
@@ -80,4 +124,65 @@ func (q *Queries) ListEvents(ctx context.Context) ([]Event, error) {
 		return nil, err
 	}
 	return items, nil
+}
+
+const registerEventUser = `-- name: RegisterEventUser :one
+INSERT INTO registrations (
+    event_id, user_id
+) VALUES (
+    ?, ?
+)
+RETURNING id, event_id, user_id, "foreign"
+`
+
+type RegisterEventUserParams struct {
+	EventID int64
+	UserID  int64
+}
+
+func (q *Queries) RegisterEventUser(ctx context.Context, arg RegisterEventUserParams) (Registration, error) {
+	row := q.db.QueryRowContext(ctx, registerEventUser, arg.EventID, arg.UserID)
+	var i Registration
+	err := row.Scan(
+		&i.ID,
+		&i.EventID,
+		&i.UserID,
+		&i.Foreign,
+	)
+	return i, err
+}
+
+const updateEvent = `-- name: UpdateEvent :one
+UPDATE events
+SET name = ?, description = ?, location = ?, dateTime = ?
+WHERE id = ?
+RETURNING id, name, description, location, datetime, user_id
+`
+
+type UpdateEventParams struct {
+	Name        string
+	Description string
+	Location    string
+	Datetime    time.Time
+	ID          int64
+}
+
+func (q *Queries) UpdateEvent(ctx context.Context, arg UpdateEventParams) (Event, error) {
+	row := q.db.QueryRowContext(ctx, updateEvent,
+		arg.Name,
+		arg.Description,
+		arg.Location,
+		arg.Datetime,
+		arg.ID,
+	)
+	var i Event
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Description,
+		&i.Location,
+		&i.Datetime,
+		&i.UserID,
+	)
+	return i, err
 }
