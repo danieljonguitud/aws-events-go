@@ -22,16 +22,16 @@ func (c *Controller) GetAllEvents(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *Controller) CreateEvent(w http.ResponseWriter, r *http.Request) {
-	var params db.CreateEventParams
+	var eventParams db.CreateEventParams
 
-	err := json.NewDecoder(r.Body).Decode(&params)
+	err := json.NewDecoder(r.Body).Decode(&eventParams)
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	event, err := c.Queries.CreateEvent(ctx.Background(), params)
+	event, err := c.Queries.CreateEvent(ctx.Background(), eventParams)
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -39,6 +39,7 @@ func (c *Controller) CreateEvent(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(map[string]interface{}{
 		"data": event,
 	})

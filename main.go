@@ -15,7 +15,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-//go:embed schema.sql
+//go:embed sql/schema.sql
 var ddl string
 
 func run() (*db.Queries, error) {
