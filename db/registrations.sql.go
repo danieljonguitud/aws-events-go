@@ -15,8 +15,8 @@ WHERE event_id = ? AND user_id = ?
 `
 
 type DeleteRegistrationParams struct {
-	EventID int64
-	UserID  int64
+	EventID int64 `json:"eventId"`
+	UserID  int64 `json:"userId"`
 }
 
 func (q *Queries) DeleteRegistration(ctx context.Context, arg DeleteRegistrationParams) error {
@@ -34,8 +34,8 @@ RETURNING id, event_id, user_id, "foreign"
 `
 
 type RegisterEventUserParams struct {
-	EventID int64
-	UserID  int64
+	EventID int64 `json:"eventId"`
+	UserID  int64 `json:"userId"`
 }
 
 func (q *Queries) RegisterEventUser(ctx context.Context, arg RegisterEventUserParams) (Registration, error) {

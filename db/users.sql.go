@@ -19,13 +19,13 @@ RETURNING id, email
 `
 
 type CreateUserParams struct {
-	Email    string
-	Password string
+	Email    string `json:"email"`
+	Password string `json:"password"`
 }
 
 type CreateUserRow struct {
-	ID    int64
-	Email string
+	ID    int64  `json:"id"`
+	Email string `json:"email"`
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (CreateUserRow, error) {
@@ -42,8 +42,8 @@ WHERE email = ?
 `
 
 type GetUserRow struct {
-	ID       int64
-	Password string
+	ID       int64  `json:"id"`
+	Password string `json:"password"`
 }
 
 func (q *Queries) GetUser(ctx context.Context, email string) (GetUserRow, error) {

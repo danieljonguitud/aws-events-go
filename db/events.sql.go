@@ -21,11 +21,11 @@ RETURNING id, name, description, location, datetime, user_id
 `
 
 type CreateEventParams struct {
-	Name        string
-	Description string
-	Location    string
-	Datetime    time.Time
-	UserID      sql.NullInt64
+	Name        string        `json:"name"`
+	Description string        `json:"description"`
+	Location    string        `json:"location"`
+	Datetime    time.Time     `json:"datetime"`
+	UserID      sql.NullInt64 `json:"userId"`
 }
 
 func (q *Queries) CreateEvent(ctx context.Context, arg CreateEventParams) (Event, error) {
@@ -119,11 +119,11 @@ RETURNING id, name, description, location, datetime, user_id
 `
 
 type UpdateEventParams struct {
-	Name        string
-	Description string
-	Location    string
-	Datetime    time.Time
-	ID          int64
+	Name        string    `json:"name"`
+	Description string    `json:"description"`
+	Location    string    `json:"location"`
+	Datetime    time.Time `json:"datetime"`
+	ID          int64     `json:"id"`
 }
 
 func (q *Queries) UpdateEvent(ctx context.Context, arg UpdateEventParams) (Event, error) {

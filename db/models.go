@@ -10,23 +10,23 @@ import (
 )
 
 type Event struct {
-	ID          int64
-	Name        string
-	Description string
-	Location    string
-	Datetime    time.Time
-	UserID      sql.NullInt64
+	ID          int64         `json:"id"`
+	Name        string        `json:"name"`
+	Description string        `json:"description"`
+	Location    string        `json:"location"`
+	Datetime    time.Time     `json:"datetime"`
+	UserID      sql.NullInt64 `json:"userId"`
 }
 
 type Registration struct {
-	ID      int64
-	EventID int64
-	UserID  int64
-	Foreign interface{}
+	ID      int64       `json:"id"`
+	EventID int64       `json:"eventId"`
+	UserID  int64       `json:"userId"`
+	Foreign interface{} `json:"foreign"`
 }
 
 type User struct {
-	ID       int64
-	Email    string
-	Password string
+	ID       int64  `json:"id"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
 }
