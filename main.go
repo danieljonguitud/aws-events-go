@@ -9,9 +9,10 @@ import (
 	"net/http"
 
 	v1 "danieljonguitud.com/aws-events-go/api/v1"
-	"danieljonguitud.com/aws-events-go/api/v1/controllers"
+	v1Controllers "danieljonguitud.com/aws-events-go/api/v1/controllers"
 	v1Routes "danieljonguitud.com/aws-events-go/api/v1/routes"
 	"danieljonguitud.com/aws-events-go/app"
+	"danieljonguitud.com/aws-events-go/app/controllers"
 	appRoutes "danieljonguitud.com/aws-events-go/app/routes"
 	"danieljonguitud.com/aws-events-go/db"
 	_ "github.com/mattn/go-sqlite3"
@@ -48,12 +49,12 @@ func main() {
 
 	server := http.NewServeMux()
 
-	controller := controllers.New(queries)
-
-	v1Api := v1.New(server, controller, queries)
+	apiController := v1Controllers.New(queries)
+	v1Api := v1.New(server, apiController, queries)
 	v1Routes.RegisterRoutes(v1Api)
 
-	app := app.New(server, queries)
+	appController := controllers.New(queries)
+	app := app.New(server, appController, queries)
 	appRoutes.RegisterRoutes(app)
 
 	fmt.Println("Server starting on :8080")

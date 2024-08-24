@@ -1,16 +1,20 @@
 package app
 
 import (
-	"danieljonguitud.com/aws-events-go/db"
 	"net/http"
+
+	"danieljonguitud.com/aws-events-go/app/controllers"
+	"danieljonguitud.com/aws-events-go/db"
 )
 
 type App struct {
-	Server *http.ServeMux
+	Server     *http.ServeMux
+	Controller *controllers.Controller
 }
 
-func New(server *http.ServeMux, db *db.Queries) *App {
+func New(server *http.ServeMux, controller *controllers.Controller, db *db.Queries) *App {
 	return &App{
-		Server: server,
+		Server:     server,
+		Controller: controller,
 	}
 }
