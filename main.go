@@ -11,6 +11,8 @@ import (
 	v1 "danieljonguitud.com/aws-events-go/api/v1"
 	"danieljonguitud.com/aws-events-go/api/v1/controllers"
 	v1Routes "danieljonguitud.com/aws-events-go/api/v1/routes"
+	"danieljonguitud.com/aws-events-go/app"
+	appRoutes "danieljonguitud.com/aws-events-go/app/routes"
 	"danieljonguitud.com/aws-events-go/db"
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -44,15 +46,18 @@ func main() {
 		log.Fatal(err)
 	}
 
-	mux := http.NewServeMux()
+	server := http.NewServeMux()
 
 	controller := controllers.New(queries)
 
-	v1Api := v1.New(mux, controller, queries)
-
+	v1Api := v1.New(server, controller, queries)
 	v1Routes.RegisterRoutes(v1Api)
 
-	if err := http.ListenAndServe(":8080", v1Api.Server); err != nil {
+	app := app.New(server, queries)
+	appRoutes.RegisterRoutes(app)
+
+	fmt.Println("Server starting on :8080")
+	if err := http.ListenAndServe(":8080", server); err != nil {
 		fmt.Println(err.Error())
 	}
 }
