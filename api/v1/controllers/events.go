@@ -16,10 +16,11 @@ func (c *Controller) GetAllEvents(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(map[string]interface{}{
+	response := map[string]interface{}{
 		"data": events,
-	})
+	}
+
+	ResponseHandler(w, http.StatusOK, response)
 }
 
 func (c *Controller) CreateEvent(w http.ResponseWriter, r *http.Request) {
@@ -42,9 +43,9 @@ func (c *Controller) CreateEvent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(map[string]interface{}{
+	response := map[string]interface{}{
 		"data": event,
-	})
+	}
+
+	ResponseHandler(w, http.StatusCreated, response)
 }

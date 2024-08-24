@@ -42,11 +42,11 @@ func (c *Controller) RegisterNewUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(map[string]interface{}{
+	response := map[string]interface{}{
 		"token": token,
-	})
+	}
+
+	ResponseHandler(w, http.StatusCreated, response)
 }
 
 func (c *Controller) LoginUser(w http.ResponseWriter, r *http.Request) {
@@ -80,9 +80,9 @@ func (c *Controller) LoginUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(map[string]interface{}{
+	response := map[string]interface{}{
 		"token": token,
-	})
+	}
+
+	ResponseHandler(w, http.StatusCreated, response)
 }
