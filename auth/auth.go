@@ -1,18 +1,16 @@
 package auth
 
 import (
-	"time"
-
-	"danieljonguitud.com/aws-events-go/db"
 	"github.com/golang-jwt/jwt/v5"
+	"time"
 )
 
 const secretKey = "supersecret"
 
-func GenerateJWT(user db.CreateUserRow) (string, error) {
+func GenerateJWT(userId int64, email string) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"userId": user.ID,
-		"email":  user.Email,
+		"userId": userId,
+		"email":  email,
 		"exp":    time.Now().Add(time.Hour),
 	})
 

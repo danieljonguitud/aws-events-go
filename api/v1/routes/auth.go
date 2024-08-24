@@ -6,10 +6,11 @@ import (
 	"danieljonguitud.com/aws-events-go/api/v1/controllers"
 )
 
-func RegisterAuthRoutes(basePath string, controller *controllers.Controller) http.Handler {
+func RegisterAuthRoutes(controller *controllers.Controller) http.Handler {
 	usersRoutes := http.NewServeMux()
 
 	usersRoutes.HandleFunc("POST /register", controller.RegisterNewUser)
+	usersRoutes.HandleFunc("POST /login", controller.LoginUser)
 
-	return http.StripPrefix(basePath, usersRoutes)
+	return usersRoutes
 }

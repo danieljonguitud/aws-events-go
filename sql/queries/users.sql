@@ -7,6 +7,6 @@ INSERT INTO users(
 RETURNING id, email;
 
 -- name: GetUser :one
-SELECT id, password
+SELECT * 
 FROM users
 WHERE email = ?;

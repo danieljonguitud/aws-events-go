@@ -8,8 +8,8 @@ import (
 func RegisterRoutes(v1Api *v1.V1API) {
 	routes := http.NewServeMux()
 
-	routes.Handle("/auth/", RegisterAuthRoutes("/auth", v1Api.Controller))
-	routes.Handle("/events/", RegisterEventsRoutes("/events", v1Api.Controller))
+	routes.Handle("/", RegisterAuthRoutes(v1Api.Controller))
+	routes.Handle("/events", RegisterEventsRoutes(v1Api.Controller))
 
 	v1Api.Server.Handle("/api/v1/", http.StripPrefix("/api/v1", routes))
 }
