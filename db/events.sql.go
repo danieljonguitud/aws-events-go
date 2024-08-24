@@ -7,7 +7,6 @@ package db
 
 import (
 	"context"
-	"database/sql"
 	"time"
 )
 
@@ -21,11 +20,11 @@ RETURNING id, name, description, location, datetime, user_id
 `
 
 type CreateEventParams struct {
-	Name        string        `json:"name"`
-	Description string        `json:"description"`
-	Location    string        `json:"location"`
-	Datetime    time.Time     `json:"datetime"`
-	UserID      sql.NullInt64 `json:"userId"`
+	Name        string    `json:"name"`
+	Description string    `json:"description"`
+	Location    string    `json:"location"`
+	Datetime    time.Time `json:"datetime"`
+	UserID      int64     `json:"userId"`
 }
 
 func (q *Queries) CreateEvent(ctx context.Context, arg CreateEventParams) (Event, error) {

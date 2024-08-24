@@ -5,17 +5,16 @@
 package db
 
 import (
-	"database/sql"
 	"time"
 )
 
 type Event struct {
-	ID          int64         `json:"id"`
-	Name        string        `json:"name"`
-	Description string        `json:"description"`
-	Location    string        `json:"location"`
-	Datetime    time.Time     `json:"datetime"`
-	UserID      sql.NullInt64 `json:"userId"`
+	ID          int64     `json:"id"`
+	Name        string    `json:"name"`
+	Description string    `json:"description"`
+	Location    string    `json:"location"`
+	Datetime    time.Time `json:"datetime"`
+	UserID      int64     `json:"userId"`
 }
 
 type Registration struct {

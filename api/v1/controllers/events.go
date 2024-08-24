@@ -2,9 +2,10 @@ package controllers
 
 import (
 	ctx "context"
-	"danieljonguitud.com/aws-events-go/db"
 	"encoding/json"
 	"net/http"
+
+	"danieljonguitud.com/aws-events-go/db"
 )
 
 func (c *Controller) GetAllEvents(w http.ResponseWriter, r *http.Request) {
@@ -22,6 +23,7 @@ func (c *Controller) GetAllEvents(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *Controller) CreateEvent(w http.ResponseWriter, r *http.Request) {
+	userId := r.Context().Value("userId").(int64)
 	var eventParams db.CreateEventParams
 
 	err := json.NewDecoder(r.Body).Decode(&eventParams)
@@ -30,6 +32,8 @@ func (c *Controller) CreateEvent(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
+
+	eventParams.UserID = userId
 
 	event, err := c.Queries.CreateEvent(ctx.Background(), eventParams)
 

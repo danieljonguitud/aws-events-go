@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS events (
     description TEXT NOT NULL,
     location TEXT NOT NULL,
     dateTime DATETIME NOT NULL,
-    user_id INTEGER,
+    user_id INTEGER NOT NULL,
     FOREIGN KEY(user_id) REFERENCES users(id)
 );
 
