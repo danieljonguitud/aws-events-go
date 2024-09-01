@@ -4,16 +4,37 @@
         <title>Events</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="https://unpkg.com/htmx.org@2.0.2" integrity="sha384-Y7hw+L/jvKeWIRRkqWYfPcvVxHzVzn5REgzbawhxAuQGwX1XWe70vji+VSeHOThJ" crossorigin="anonymous"></script>
     </head>
-    <body>                      
+    <body>
+        <form hx-post="/events" hx-target="#events-list" hx-swap="beforeend">
+            <div>
+                <label for="name">Event Name</label>
+                <input type="text" name="name" value="" required />
+            </div>
+            <div>
+                <label for="description">Event Description</label>
+                <input type="text" name="description" value="" required />
+            </div>
+            <div>
+                <label for="location">Event Location</label>
+                <input type="text" name="location" value="" required />
+            </div>
+
+            <div>
+                <input type="submit" value="Submit">
+            </div>
+        </form>
+        <div id="events-list">
+        {{range $Event := .Events}}
         <ul>
-            {{range $Event := .Events}}
-                <li>{{$Event.Name}}</li>
-                <ul>
-                    <li>{{$Event.Description}}</li>
-                </ul>
-            {{end}}
+            <li>Name: {{$Event.Name}}</li>
+            <li>Description: {{$Event.Description}}</li>
+            <li>Location: {{$Event.Location}}</li>
+            <li>Creator: {{$Event.UserID}}</li>
         </ul>
+        {{end}}
+        </div>
         <a href="/">Go back</a>
     </body>
 </html>

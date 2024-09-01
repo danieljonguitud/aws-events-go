@@ -24,7 +24,7 @@ func (c *Controller) GetAllEvents(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *Controller) CreateEvent(w http.ResponseWriter, r *http.Request) {
-	userId := r.Context().Value("userId").(int64)
+	userId := int64(1)
 	var eventParams db.CreateEventParams
 
 	err := json.NewDecoder(r.Body).Decode(&eventParams)

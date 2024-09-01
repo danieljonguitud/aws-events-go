@@ -18,12 +18,7 @@ func New(queries *db.Queries) *Controller {
 }
 
 func RenderView(w http.ResponseWriter, file string, data map[string]interface{}) {
-	tmpl, err := template.ParseFiles(file)
-
-	if err != nil {
-		http.Error(w, "Could not load template", http.StatusInternalServerError)
-		return
-	}
+	tmpl := template.Must(template.ParseFiles(file))
 
 	if err := tmpl.Execute(w, data); err != nil {
 		http.Error(w, "Could not render template", http.StatusInternalServerError)
