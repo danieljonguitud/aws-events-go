@@ -2,14 +2,14 @@ package controllers
 
 import (
 	ctx "context"
-	"fmt"
 	"log"
 	"net/http"
-	"text/template"
 	"time"
 
 	"danieljonguitud.com/aws-events-go/db"
 )
+
+const eventsHTML = "app/views/events/index.html"
 
 func (c *Controller) GetAllEvents(w http.ResponseWriter, r *http.Request) {
 	events, err := c.Queries.ListEvents(ctx.Background())
@@ -19,11 +19,7 @@ func (c *Controller) GetAllEvents(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	data := map[string]interface{}{
-		"Events": events,
-	}
-
-	RenderView(w, "app/views/events/index.html", data)
+	RenderView(w, eventsHTML, events)
 }
 
 func (c *Controller) CreateEvent(w http.ResponseWriter, r *http.Request) {
@@ -49,7 +45,5 @@ func (c *Controller) CreateEvent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	htmlStr := fmt.Sprintf("<ul><li>Name: %s</li><li>Description: %s</li><li>Location: %s</li><li>Creator: %s</li></ul>", event.Name, event.Description, event.Location, event.UserID)
-	tmpl, _ := template.New("t").Parse(htmlStr)
-	tmpl.Execute(w, nil)
+	RenderFragment(w, eventsHTML, "event-list-element", event)
 }

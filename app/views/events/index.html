@@ -26,14 +26,16 @@
             </div>
         </form>
         <div id="events-list">
-        {{range $Event := .Events}}
-        <ul>
-            <li>Name: {{$Event.Name}}</li>
-            <li>Description: {{$Event.Description}}</li>
-            <li>Location: {{$Event.Location}}</li>
-            <li>Creator: {{$Event.UserID}}</li>
-        </ul>
-        {{end}}
+        {{ range . }}
+            {{ block "event-list-element" . }}
+                <ul>
+                    <li>Name: {{.Name}}</li>
+                    <li>Description: {{.Description}}</li>
+                    <li>Location: {{.Location}}</li>
+                    <li>Creator: {{.UserID}}</li>
+                </ul>
+            {{ end }}
+        {{ end }}
         </div>
         <a href="/">Go back</a>
     </body>

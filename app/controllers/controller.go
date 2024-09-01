@@ -17,10 +17,18 @@ func New(queries *db.Queries) *Controller {
 	}
 }
 
-func RenderView(w http.ResponseWriter, file string, data map[string]interface{}) {
+func RenderView(w http.ResponseWriter, file string, data any) {
 	tmpl := template.Must(template.ParseFiles(file))
 
 	if err := tmpl.Execute(w, data); err != nil {
+		http.Error(w, "Could not render template", http.StatusInternalServerError)
+	}
+}
+
+func RenderFragment(w http.ResponseWriter, file string, fragment string, data any) {
+	tmpl := template.Must(template.ParseFiles(file))
+
+	if err := tmpl.ExecuteTemplate(w, fragment, data); err != nil {
 		http.Error(w, "Could not render template", http.StatusInternalServerError)
 	}
 }
