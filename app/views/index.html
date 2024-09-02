@@ -2,9 +2,28 @@
 <html lang="en">
 <head>
     <title>{{ .Title }}</title>
+    <script src="https://unpkg.com/htmx.org@2.0.2" integrity="sha384-Y7hw+L/jvKeWIRRkqWYfPcvVxHzVzn5REgzbawhxAuQGwX1XWe70vji+VSeHOThJ" crossorigin="anonymous"></script>
+         <style>       html.is-changing .transition-fade {         transition: opacity 0.25s;         opacity: 1;       }       html.is-animating .transition-fade {         opacity: 0;       }     </style>
+         <script src="https://unpkg.com/@swup/forms-plugin@3"></script>
 </head>
 <body>
-    <h1>{{ .Message }}</h1>
-    <a href="/events">Go to event listaaa</a>
+    <main id="swup" class="transition-fade">
+        <h1>{{ .Message }}</h1>
+        <form action="/login" method="POST" data-swup-form data-swup-animation="overlay">
+            <div>
+                <label for="email">Email</label>
+                <input type="text" name="email" value="" required>
+            </div>
+            <div>
+                <label for="password">Password</label>
+                <input type="password" name="password" value="" required>
+            </div>
+            <div>
+                <input type="submit" value="Submit">
+            </div>
+        </form>
+    </main>
+    <script src="https://unpkg.com/swup@4"></script>
+    <script>   const swup = new Swup({   plugins: [new SwupFormsPlugin()] }); </script>
 </body>
 </html> 

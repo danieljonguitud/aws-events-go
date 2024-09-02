@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	v1 "danieljonguitud.com/aws-events-go/api/v1"
-	"danieljonguitud.com/aws-events-go/api/v1/middlewares"
+	"danieljonguitud.com/aws-events-go/shared/middlewares"
 )
 
 func RegisterRoutes(v1Api *v1.V1API) {

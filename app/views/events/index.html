@@ -5,38 +5,43 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <script src="https://unpkg.com/htmx.org@2.0.2" integrity="sha384-Y7hw+L/jvKeWIRRkqWYfPcvVxHzVzn5REgzbawhxAuQGwX1XWe70vji+VSeHOThJ" crossorigin="anonymous"></script>
+         <style>       html.is-changing .transition-fade {         transition: opacity 0.25s;         opacity: 1;       }       html.is-animating .transition-fade {         opacity: 0;       }     </style>
     </head>
     <body>
-        <form hx-post="/events" hx-target="#events-list" hx-swap="beforeend">
-            <div>
-                <label for="name">Event Name</label>
-                <input type="text" name="name" value="" required />
-            </div>
-            <div>
-                <label for="description">Event Description</label>
-                <input type="text" name="description" value="" required />
-            </div>
-            <div>
-                <label for="location">Event Location</label>
-                <input type="text" name="location" value="" required />
-            </div>
+        <main id="swup" class="transition-fade">
+            <form hx-post="/events" hx-target="#events-list" hx-swap="beforeend">
+                <div>
+                    <label for="name">Event Name</label>
+                    <input type="text" name="name" value="" required />
+                </div>
+                <div>
+                    <label for="description">Event Description</label>
+                    <input type="text" name="description" value="" required />
+                </div>
+                <div>
+                    <label for="location">Event Location</label>
+                    <input type="text" name="location" value="" required />
+                </div>
 
-            <div>
-                <input type="submit" value="Submit">
-            </div>
-        </form>
-        <div id="events-list">
-        {{ range . }}
-            {{ block "event-list-element" . }}
+                <div>
+                    <input type="submit" value="Submit">
+                </div>
+            </form>
+            <div id="events-list">
+                {{ range . }}
+                {{ block "event-list-element" . }}
                 <ul>
                     <li>Name: {{.Name}}</li>
                     <li>Description: {{.Description}}</li>
                     <li>Location: {{.Location}}</li>
                     <li>Creator: {{.UserID}}</li>
                 </ul>
-            {{ end }}
-        {{ end }}
-        </div>
-        <a href="/">Go back</a>
+                {{ end }}
+                {{ end }}
+            </div>
+            <a href="/">Go back</a>
+        </main>
+        <script src="https://unpkg.com/swup@4"></script>
+        <script>   const swup = new Swup(); </script>
     </body>
 </html>

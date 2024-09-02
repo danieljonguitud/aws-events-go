@@ -11,8 +11,8 @@ type PageData struct {
 
 func (c *Controller) Index(w http.ResponseWriter, r *http.Request) {
 	data := map[string]interface{}{
-		"Title":   "Welcome Page",
-		"Message": "Hello, World!",
+		"Title":   "Home Page",
+		"Message": "Events App!",
 	}
 
 	RenderView(w, "app/views/index.html", data)

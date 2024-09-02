@@ -1,8 +1,9 @@
 package routes
 
 import (
-	"danieljonguitud.com/aws-events-go/app"
 	"net/http"
+
+	"danieljonguitud.com/aws-events-go/app"
 )
 
 func RegisterRoutes(app *app.App) {
